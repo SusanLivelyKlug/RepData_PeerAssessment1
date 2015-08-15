@@ -113,12 +113,8 @@ fixed_data <- merge( data, timeseries, by = "interval" )
 fixed_data$steps <- ifelse( is.na( fixed_data$steps.x ),
                             fixed_data$steps.y, 
                             fixed_data$steps.x )
-steps_by_day <- aggregate( fixed_data$steps, 
-                           by = list( fixed_data$date ),
-                           FUN = sum)
-colnames(steps_by_day) <- c("day", "steps")
 # Verify for sanity that there are no NA in the steps column
-sum( is.na( steps_by_day$steps ) )
+sum( is.na( fixed_data$steps ) )
 ```
 
 ```
@@ -129,6 +125,10 @@ Make a histogram of the total number of steps taken each day and Calculate and r
 
 
 ```r
+steps_by_day <- aggregate( fixed_data$steps, 
+                           by = list( fixed_data$date ),
+                           FUN = sum)
+colnames(steps_by_day) <- c("day", "steps")
 hist( steps_by_day$steps,
      xlab="steps", ylab="day", main="Total steps per day" )
 ```
