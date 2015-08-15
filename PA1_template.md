@@ -1,6 +1,5 @@
 # Reproducible Research: Peer Assessment 1
 slk  
-`r Sys.Date()`  
 -------------------------------------------------------------------------------
 ## Loading and preprocessing the data
 File "activity.zip" must be unzipped and loaded. 
