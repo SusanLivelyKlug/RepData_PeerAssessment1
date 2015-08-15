@@ -10,7 +10,6 @@
 
 <meta name="author" content="slk" />
 
-<meta name="date" content="2015-08-14" />
 
 <title>Reproducible Research: Peer Assessment 1</title>
 
@@ -64,7 +63,6 @@ img {
 <div id="header">
 <h1 class="title">Reproducible Research: Peer Assessment 1</h1>
 <h4 class="author"><em>slk</em></h4>
-<h4 class="date"><em>2015-08-14</em></h4>
 </div>
 
 
@@ -75,9 +73,7 @@ img {
 <pre class="r"><code>data &lt;- read.csv( unzip( &quot;activity.zip&quot; ) )</code></pre>
 <p>Once read the data can be tidied as follows The class of the date column is factor: convert the date column to date</p>
 <pre class="r"><code>library( lubridate )
-data$date &lt;- ymd( data$date )
-unique_dates &lt;- unique( data$date )
-unique_intervals &lt;- unique( data$interval )</code></pre>
+data$date &lt;- ymd( data$date )</code></pre>
 <p>Unique days in the data range from 2012-10-01 through 2012-11-30 by visual inspection.</p>
 </div>
 <div id="what-is-mean-total-number-of-steps-taken-per-day" class="section level2">
@@ -131,6 +127,7 @@ steps_by_day &lt;- aggregate( fixed_data$steps,
                            by = list( fixed_data$date ),
                            FUN = sum)
 colnames(steps_by_day) &lt;- c(&quot;day&quot;, &quot;steps&quot;)
+# Verify for sanity that there are no NA in the steps column
 sum( is.na( steps_by_day$steps ) )</code></pre>
 <pre><code>## [1] 0</code></pre>
 <p>Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?</p>
@@ -161,16 +158,7 @@ sum( is.na( steps_by_day$steps ) )</code></pre>
 ## The following objects are masked from 'package:base':
 ## 
 ##     intersect, setdiff, setequal, union</code></pre>
-<pre class="r"><code>is.weekend &lt;- function( x ) {
-     if ( ( x == 1 ) || ( x == 7 ) ) {
-          TRUE
-     } else
-          FALSE
-}
-fixed_data &lt;- mutate( fixed_data, weekday = wday( fixed_data$date, label = TRUE ) )
-# never works, grr
-# fixed_data &lt;- mutate( fixed_data, b_weekend = is.weekend( fixed_data$weekday ) )
-
+<pre class="r"><code>fixed_data &lt;- mutate( fixed_data, weekday = wday( fixed_data$date, label = TRUE ) )
 fixed_data$b_weekend &lt;- ifelse( fixed_data$weekday %in% c(&quot;Sat&quot;, &quot;Sun&quot;), &quot;weekends&quot;, &quot;weekdays&quot;)</code></pre>
 <p>Make a panel plot containing a time series plot (i.e. type = “l”) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data.</p>
 <pre class="r"><code>library( lattice )

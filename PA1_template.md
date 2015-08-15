@@ -16,8 +16,6 @@ The class of the date column is factor: convert the date column to date
 ```r
 library( lubridate )
 data$date <- ymd( data$date )
-unique_dates <- unique( data$date )
-unique_intervals <- unique( data$interval )
 ```
 
 Unique days in the data range from 2012-10-01 through 2012-11-30
@@ -119,6 +117,7 @@ steps_by_day <- aggregate( fixed_data$steps,
                            by = list( fixed_data$date ),
                            FUN = sum)
 colnames(steps_by_day) <- c("day", "steps")
+# Verify for sanity that there are no NA in the steps column
 sum( is.na( steps_by_day$steps ) )
 ```
 
@@ -179,16 +178,7 @@ library( dplyr )
 ```
 
 ```r
-is.weekend <- function( x ) {
-     if ( ( x == 1 ) || ( x == 7 ) ) {
-          TRUE
-     } else
-          FALSE
-}
 fixed_data <- mutate( fixed_data, weekday = wday( fixed_data$date, label = TRUE ) )
-# never works, grr
-# fixed_data <- mutate( fixed_data, b_weekend = is.weekend( fixed_data$weekday ) )
-
 fixed_data$b_weekend <- ifelse( fixed_data$weekday %in% c("Sat", "Sun"), "weekends", "weekdays")
 ```
 
